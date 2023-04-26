@@ -1,0 +1,235 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Noto Sans', sans-serif;
+}
+  
+html {
+  scroll-behavior: smooth;
+}
+ 
+body, html{
+    background-color: #CFCFCF;
+    overflow-x: hidden;
+}
+/*****************************************************/
+/*****************************************************/
+/*****************************************************/
+.block {
+    margin-top: -2%;
+}
+.box-left {
+    position: relative;
+    margin-bottom: 11%;
+    padding-bottom: 6%;
+    padding-top: 1%;
+    margin-top: 11%;
+    background-color: #4D7EA8;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-left: 2%;
+    width: 54%;
+    border-radius: 10px;
+    align-items: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+}
+.box-left h1 {
+    text-align: center;
+    padding-top: 20px;
+    font-weight: bold;
+    color: #CFCFCF;
+}
+
+.table{
+    padding-top: 0%;
+    width:100%;
+    border-collapse: collapse;
+    color: black;
+}
+td, th /* Mettre une bordure sur les td ET les th */{
+    border: 1px solid white;
+    color: black;
+    /*font-size: 30px;*/
+    width:10%;
+    padding: 2%;
+    text-align: center;
+}
+
+.box-bottom {
+    position: relative;
+    width: 800px;
+    height: 350px;
+    background: #FFF;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+.box-bottom h1{
+    text-align: center;
+    padding-top: 20px;
+    font-weight: bold;
+    color: #4D7EA8;
+}
+.add_collar {
+    margin-left: 200px;
+    margin-top: 20px;
+}
+
+
+.custom-btn {
+    width: 100px;
+    height: 40px;
+    margin-left: 20px;
+    padding: 10px 25px;
+    border: 2px solid #000;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+  
+.btn-add {
+    transition: all 0.3s ease;
+}
+.btn-add:hover {
+    box-shadow:
+     -7px -7px 20px 0px #fff9,
+     -4px -4px 5px 0px #fff9,
+     7px 7px 20px 0px #0002,
+     4px 4px 5px 0px #0001;
+}
+
+.del_collar{
+    margin-left: 300px;
+    margin-top: 20px;   
+}
+  
+.custom-btn-del {
+    width: 100px;
+    height: 40px;
+    margin-left: 20px;
+    top: 10px;
+    border: 2px solid #000;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+  
+.btn-del {
+    transition: all 0.3s ease;
+}
+.btn-del:hover {
+    box-shadow:
+     -7px -7px 20px 0px #fff9,
+     -4px -4px 5px 0px #fff9,
+     7px 7px 20px 0px #0002,
+     4px 4px 5px 0px #0001;
+}
+
+.add_animal {
+    margin-left: 50px;
+    margin-top: 20px;
+}
+
+.box-right {
+    margin-bottom: 13%;
+    position: relative;
+    margin-top: -55%;
+    background-color: #4D7EA8;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 2%;
+    margin-left: 58%;
+    width: 41%;
+    border-radius: 10px;
+    align-items: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+}
+.box-right h1 {
+    text-align: center;
+    padding-top: 20px;
+    font-weight: bold;
+    color: #CFCFCF;
+}
+
+
+.ligne-admin {
+    border: 1px dashed #333;
+    font-size: 10px;
+}
+
+
+/* user page*/
+.box-right-user {
+    position: relative;
+    margin-top: 20px;
+    left: 60%;
+    width: 500px;
+    height: 650px;
+    background: #FFF;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+.box-right-user h1{
+    text-align: center;
+    padding-top: 20px;
+    font-weight: bold;
+    color: #4D7EA8;
+}
+
+.ligne {
+    border: 1px dashed #333;
+    font-size: 20px;
+}
+#footer-thankyou {
+    visibility: hidden;
+}
+#wpfooter {
+    visibility: hidden;
+}
+.left-part {
+    position: absolute;
+    width: 800px;
+    height: 150px;
+    background: #FFF;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);;
+}
+.left-part h1 {
+    text-align: center;
+    padding-top: 20px;
+    font-weight: bold;
+    color: #4D7EA8;
+}
+
+#choose_animal{
+    width: 300px;
+    margin-left: 300px;
+    margin-top: 20px; 
+}
+
+
+
+
+/****************************/
+@media screen and (max-width: 1440px) {
+    .box-right {
+        margin-left: 3%;
+        margin-top: 3%;
+        width: 94%;
+    }
+    .box-left {
+        width: 94%;
+        margin-left: 3%;
+        margin-top: 16%;
+    }
+}
