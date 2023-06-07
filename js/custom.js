@@ -1,5 +1,5 @@
-const mqtt = require('mqtt');
-/*
+/*const mqtt = require('mqtt');
+
 // Configuration de l'application TTN
 const appId = 'reciever-mapets'; // remplacer par l'ID de votre application TTN
 const accessKey = 'NNSXS.JMGNXLYHEK2E6ZXBJDO475LKTTULRB4NSPBJPPQ.2M2FJNJKJAJ2HOPI3QXE3JBZBXIMFZYJ3NEHTQU6KQZPLQJYJHUQ'; // remplacer par votre clé d'accès TTN
@@ -23,7 +23,7 @@ document.getElementById('create-device-form').addEventListener('submit', functio
   console.log('passe');
   client.connect();
 });
-*/
+
 // Configuration de l'application TTN
 const region = 'eu';
 const appId = 'reciever-mapets';
@@ -72,3 +72,4 @@ client.on('connect', () => {
 client.on('error', (error) => {
   console.error('Erreur de connexion au client MQTT :', error);
 });
+*/

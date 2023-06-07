@@ -639,27 +639,94 @@ function choose_spacies(){
     echo '<h1 class="title">Voici tous les trajets de l\'espece: ' . $spacies . '</h1>';
     // Récupere tous les collier assigné a lespece d'animal sélectionné
     foreach ($resultat as $animal) {
-      $name_animal = $animal->nom;
-      $table_categories = $wpdb->prefix . 'collier';
-      $collar_animal = $wpdb->get_results("SELECT * FROM $table_categories WHERE animal='$name_animal'");
-      // Récupere tous les parcours grace au collier qui est assigné à l'animal
-      foreach ($collar_animal as $collar) {
-        if ($collar->animal == $name_animal) {
-          $number_of_course = $collar->parcours;
-          $table_categories = $wpdb->prefix . 'parcours';
-          $resultat_course = $wpdb->get_results("SELECT * FROM $table_categories ");
-          // Boucle sur les parcours de chaque animaux de l'espece pour y afficher son trajet.
-          foreach ($resultat_course as $course) {
-
-            if ($number_of_course == $course->nom) {
-              affichage_carte();
-            }
-          }
-        }
-      }
+      $name_of_collar = $animal->nom_collier;
+      affichage_carte_espece($name_of_collar);
+      
     }
   }
 }
+
+/**
+ * Function affichage_carte_espece()
+ * La fonction affiche une carte interactive à l'aide de la bibliothèque Leaflet.
+ * Elle utilise des fichiers CDN pour charger Leaflet et définit les propriétés de la carte (latitude, longitude, zoom, fond de carte, etc.).
+ * La carte est insérée dans un élément HTML ayant l'ID "map".
+ * Un marqueur est également ajouté à la carte en utilisant les coordonnées spécifiées.
+ * @return HTML Affichage de la carte
+ */
+function affichage_carte_espece($name_of_collar) {
+  echo '
+  <style>
+      /* Style CSS pour la carte */
+      #map {
+          width: 100%;
+          height: 100vh;
+          /* La carte occupera 100% de la largeur et 100% de la hauteur de la fenêtre */
+      }
+  </style>';
+
+  //include 'map.php';
+
+  global $wpdb;
+  $table_categories = $wpdb->prefix . 'parcours';
+  $data = $wpdb->get_results("SELECT id_parcours FROM $table_categories WHERE id_collier='$name_of_collar'");
+
+  echo '<div id="map"></div>';
+
+  echo '<script>
+      // Création de la carte
+      var map = L.map("map").setView([0, 0], 10);
+
+      // Ajout de la couche de tuiles OpenStreetMap à la carte
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors",
+          maxZoom: 25,
+      }).addTo(map);
+  </script>';
+
+  $colors = array('red', 'blue', 'green', 'orange', 'purple', 'yellow', 'cyan', 'magenta');
+  $colorIndex = 0;
+
+  foreach ($data as $parcours) {
+      $id_parcours = $parcours->id_parcours;
+      $table_categories = $wpdb->prefix . 'parcours_' . $id_parcours;
+      $res = $wpdb->get_results("SELECT * FROM $table_categories");
+          
+
+      echo '<script>';
+      echo 'var polylinePoints = [];';
+
+      foreach ($res as $trajet) {
+          $latitude = $trajet->latitude;
+          $longitude = $trajet->longitude;
+          $altitude = $trajet->altitude;
+          $heureDebut = $trajet->heure_debut;
+          $itineraire = "https://www.openstreetmap.org/directions?engine=osrm&route=" . $latitude . "," . $longitude . "," . $altitude;
+          $color = $colors[$colorIndex];
+
+          echo '
+          var marker = L.marker([' . $latitude . ', ' . $longitude . '])
+              .addTo(map)
+              .bindPopup("Heure de passage: ' . $heureDebut . '<br>Itinéraire: <a href=\'' . $itineraire . '\' target=\'_blank\'>Go</a>")
+              .openPopup();
+          ';
+
+          echo 'polylinePoints.push([' . $latitude . ', ' . $longitude . ']);';
+      }
+
+      echo '
+      var polyline = L.polyline(polylinePoints, { color: "' . $color . '" }).addTo(map);
+      map.fitBounds(polyline.getBounds());
+      ';
+      echo '</script>';
+
+      $colorIndex++;
+  }
+}
+
+
+
+
 
 /**
  * Function affichage_carte()
@@ -669,51 +736,23 @@ function choose_spacies(){
  * Un marqueur est également ajouté à la carte en utilisant les coordonnées spécifiées.
  * @return HTML Affichage de la carte
  */
-function affichage_carte(){
+function affichage_carte($name_of_collar){
   echo '
-            <div class="map-animal">
-              <!-- Nous chargeons les fichiers CDN de Leaflet. Le CSS AVANT le JS -->
-              <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
-                <style type="text/css">
-                    #map{ /* la carte DOIT avoir une hauteur sinon elle n\'apparaît pas */
-                        height:400px;
-                    }
-                </style>
-                <title>Carte</title>
-          
-                <div id="map">
-                  <!-- Ici s\'affichera la carte -->
-                </div>
-          
-                <!-- Fichiers Javascript -->
-                <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
-                <script type="text/javascript">
-                    // On initialise la latitude et la longitude de Paris (centre de la carte)
-                    var lat = 48.852969;
-                    var lon = 2.349903;
-                    var macarte = null;
-                  
-                  // Fonction d\'initialisation de la carte
-                    function initMap() {
-                        // Créer l\'objet "macarte" et l\'insèrer dans l\'élément HTML qui a l\'ID "map"
-                        macarte = L.map(\'map\').setView([lat, lon], 11);
-                        // Leaflet ne récupère pas les cartes (tiles) sur un serveur par défaut. Nous devons lui préciser où nous souhaitons les récupérer. Ici, openstreetmap.fr
-                        L.tileLayer(\'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png\', {
-                            // Il est toujours bien de laisser le lien vers la source des données
-                            attribution: \'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>\',
-                            minZoom: 1,
-                            maxZoom: 20
-                        }).addTo(macarte);
-                                // Nous ajoutons un marqueur
-                        var marker = L.marker([lat, lon]).addTo(macarte);
-                        // Nous parcourons la liste des villes             
-                    }
-                    window.onload = function(){
-                // Fonction d\'initialisation qui s\'exécute lorsque le DOM est chargé
-                initMap();
-                    };
-                </script>
-               </div>
+  <style>
+  /* Style CSS pour la carte */
+  #map {
+      width: 100%;
+      height: 100vh;
+      /* La carte occupera 100% de la largeur et 100% de la hauteur de la fenêtre */
+  }
+
+</style>
+            <div class="map-animal">';
+	    // Inclusion du fichier database.php permet de se connecter à la base de données et accédé au trajet
+		    include 'database.php';
+		    // Inclusion du fichier map.php contenant le code pour afficher la carte et et les points ainsi que les relation 
+		    include 'map.php'; 
+            echo '</div>
             ';
 
 }

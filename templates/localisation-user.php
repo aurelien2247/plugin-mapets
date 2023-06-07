@@ -6,6 +6,9 @@ if ( in_array( 'subscriber' , (array) $user->roles ) || in_array( 'author' , (ar
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
   <script src="/wp-content/plugins/admin_templates/js/custom.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+
   ';
 
   if (isset($_POST['localiser'])) {
@@ -23,17 +26,8 @@ if ( in_array( 'subscriber' , (array) $user->roles ) || in_array( 'author' , (ar
   
       foreach ($collar_animal as $collar){
         if($collar->animal == $animal_nom) {
-          $number_of_course = $collar->parcours;
-          $table_categories = $wpdb->prefix . 'parcours';
-          $resultat_course = $wpdb->get_results( "SELECT * FROM $table_categories " );
-  
-          foreach ($resultat_course as $course){
-            affichage_carte();
-            if ($number_of_course == $course->nom) {
-              affichage_carte();
-            }
-  
-          }
+          $name_of_collar = $collar->nom_collier ;
+          affichage_carte($name_of_collar);
         } 
       }
     } else {
@@ -42,17 +36,8 @@ if ( in_array( 'subscriber' , (array) $user->roles ) || in_array( 'author' , (ar
 
       foreach ($resultat_animal as $collar){
         if($collar->animal == $animal_nom) {
-          $number_of_course = $collar->parcours;
-          $table_categories = $wpdb->prefix . 'parcours';
-          $resultat_course = $wpdb->get_results( "SELECT * FROM $table_categories " );
-  
-          foreach ($resultat_course as $course){
-  
-            if ($number_of_course == $course->nom) {
-              affichage_carte();
-            }
-  
-          }
+          $name_of_collar = $collar->nom_collier 	;
+          affichage_carte($name_of_collar);
         }
       }
       $table_categories = $wpdb->prefix . 'animal';
